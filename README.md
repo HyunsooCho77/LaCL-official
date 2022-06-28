@@ -4,4 +4,8 @@ Some codes are from (https://github.com/wzhouad/Contra-OOD).
 
 
 # Usage
-python run_LaCL.py
+Train and evaluation code:
+``python run_LaCL.py``
+
+# Parameters
+Related hyper-parameters can be modified in model_config.yaml.
