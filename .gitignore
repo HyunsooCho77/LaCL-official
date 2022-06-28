@@ -3,3 +3,4 @@
 __pycache__
 fairseq
 run_LaCL.log
+.hydra
