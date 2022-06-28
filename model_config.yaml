@@ -11,162 +11,36 @@ save_dir: ckpt
 log_dir: performance
 n_classes : 2 # Changes automatically.
 num_workers: 4
-# seed: 0
-
-# Basic Setting
-# model_name: 210929_${training_type}_${optimizer}_lr${learning_rate}_betas${beta1},${beta2}_amsgrad${amsgrad}
-# model_name: 210930_architecture${architecture}_layerwise${layerwise_reg}reg_loss_weight${reg_loss_weight}_trial${trial}
-
-train_epochs: 40
-train_batch: 16
-
-# Save, evaluate, resume 
-load_pretrained_weights: False
-eval_pretrained_weights: False
-visualize_tsne: True
-tsne_mode: intent # option = [intent, domain, all]
-pretrained_weights_fname: epoch3_acc93.23.pth
-# load_fname: origin+ss_best_acc.pth
-load_fname: epoch_20_acc_96.02.pth
-save_interval: 4
-
-# Bert hyper-parameters.
-# backbone_plm: roberta-large # option = [bert, roberta, albert]
-backbone_plm: bert-base # option = [bert, roberta, albert]
+model_name_or_path: bert-base-uncased
 num_layer: 12 # changes automatically. !!
-out_type: out_last_cls # option = [out_last_cls, out_pooler, out_mean_token, out_max_token]
-max_length: 512
-
-# Training type
-training_type: ce_cl # option = [baseline, ce_cl, cl]
-architecture: base_ood # option = [gp_ts, gp_ts_reverse, gp_ts_withcls, base]
-type: 2  # temporary argument = 1,2,3
-temp_eval: False # temporary argument = True, False
-# gp_ts1 -> single mlp, gp_ts2 -> two mlps, gp_ts3
-classifier_type: softmax # option = [softmax, sigmoid]
-label_smoothing: True # option = [True, False]
-smoothing_ratio: 0 # option = 0 ~ 1 float number
-early_stopping: True
-
-# classwise batch
-classwise_batch: None # option = [None, domain, intent]
-label_groups: [] # list of label groups(list), ex) domain: [[0,1,2],[3,4],[5],[6],[7,8,9]]
-
-# Evaluation Type
-evaluation_type: baseline # option = [baseline, mahalanobis, layerwise_mahalanobis]
-mahal_layer: last # [all, last]
-SEI_method: wa # option = [min, mean, wa]
-
-
-# For Amazon Dataset
-train_test_ratio: 0.8
-amazon_domains_ind: ['d', 'E', 'k']
-amazon_domains_dg: ['kitchen_&_housewares']
-amazon_domains_ood: ['dvd']
-
-# Clinc150 Dataset
-
-data_name: 'clinc150' # ['clinc150', 'snips', 'banking77']
-
-# Contrastive Learning hyper-parameters.
-hid_type: hid_last_cls # option = [hid_last_cls, hid_pooler, hid_mean_token, hid_max_token, hid_all_layers]
-encoder_dim: 1024 # 1024(encoder dimension)-> 128(projection dimension) in Contrastive learning
-projection_dim: 768 # projection dimension in Contrastive learning and hidden dim in Vanilla PLM classification.
-cl_weight: 1 # weight for nt-xent loss
-temperature: 0.2
-
-# Load pre-trained CL model
-load_cl_weights: False
-cl_model_name: ""
-cl_load_fname: best_acc.pth
-
-
-# Optimizer & Scheduler
-optimizer: adamw # option =[adam, sgd, ...]
-learning_rate: 1e-5 # Adamw : [1e-5, 5e-6]
-# weight_decay: 1e-6
-eps: 1e-6
-momentum: 0.9
-beta1: 0.9
-beta2: 0.99
-scheduler: cosine_annealing # option =[step_lr, multi_step_lr, cosine_annealing]
-eta_min: 5e-2
-gamma: 0.1
-amsgrad: True
-
-
-# keyword extraction
-keyword_model_name: "baseline_baseline_softmax_last_cls_sgd_anneal_2e-4_Nonewise_em_1e-3_smooth_0_bt"
-keyword_model_ckpt: "best_acc.pth"
-keyword_backbone_plm: "bert"
-keyword_rep_ratio: 0.5
-keywords_per_class: 3
-
-# deprecated
-test_only: False
-remain: False
-# split_ratio: 1.0
-
-# gradient_accumulation
-gradient_accumulation: False
-accumulation_batch_size: 1024
-
-
-# correlation loss
-reg_loss: False
-reg_loss_only_identity: True
-reg_loss_weight: 0.1 # layerwise_reg가 true이면 0.1, false이면 1
-reg_lambda: 0.005
-layerwise_reg: True
-
-bt_lambda: 0.005
-bt_loss_weight: 0.005
-
-# Experiment type (split/non-split)
-split: False
-split_ratio: 0.25 # [0.25, 0.5, 0.75]
-
-
-
-
-# CUDA_VISIBLE_DEVICES="1" python run_LACL.py task_name=clinc150 seed=1 LACL3=True model_name=211017_LaCL3_reg12_smallWeight2 cl_weight=0.1 projection_dim=768
-
-
-reg2_loss : False
 max_seq_length: 512
-batch_size: ${train_batch}
-warmup_ratio: 0.06
-weight_decay: 0.01
-num_train_epochs: ${train_epochs}
-seed: 1
-project_name: ood
-alpha: 2.0
-loss: margin
-dataset: snips
-adam_epsilon: ${eps}
 device: 0
 n_gpu: 1
-model_name_or_path: bert-base-uncased
-# model_name_or_path: roberta-base
-LACL_fixed: True
 
+# Basic config
+model_name: "LaCL"
+num_train_epochs: 40
+train_batch: 100
+seed: 1
+log_interval: 1
 
+# Experiment type (split/non-split)
+split: True
+split_ratio: 0.25 # [0.25, 0.5, 0.75]
+task_name: banking77 # ['clinc150', 'snips', 'banking77', 'mix_snips', 'mix_banking']
 
-# augmentation setting
-write_aug_data: False
+# Optimizer & Scheduler
+learning_rate: 1e-5 # Adamw : [1e-5, 5e-6]
+eta_min: 5e-2
+weight_decay: 0.01
+adam_epsilon: 1e-6
 
-# augment_both: None
-# augment_method: "bt" # ['bt', 'cw_random', 'cw_random_add', 'cw_keyword', 'ss', 'token_cutoff', 'shuffle', 'span', 'none']
-
-augment_both: None
+# Data augmentation
+augment_both: "span"
 augment_method: "bt/span"
-
-
 no_dropout: False
 dataset_num: 1
-spacy_model: "en_core_web_trf"
 beam: 1
-bt_names: ['transformer.wmt19.en-de.single_model', 'transformer.wmt19.de-en.single_model']
 ss_ratio: 0.1
 cw_ratio: 0.1
 second_aug_ratio: 0.5
@@ -175,33 +49,15 @@ span_mask_len: 5
 cutoff_ratio: 0.15
 
 
-
-cl2_projector: True
-
-mean_pooling_type: 'mask'
-cl1: True
-cl2: True
-
-cl1_mcl: False
-cl2_mcl: False
-loss_ce: False
-
-cl1_scl: True
-cl2_scl: True
-
-
+# LaCL config
+gp_location: 'token'
 gp_pooling: mean_pool
-
-final_rep: all #last_cls,global_projection, last_cls+global_projection, all
 gp_layers: [1,2,3,4,5,6,7,8,9,10,11,12] # global projector layers
-# gp_num_layers: 1 # GP_layer_stride
-# gp_style: interval # interval, min, max
-log_interval: 2
-model_name: 220516_cl2-${cl2}_gp-${gp_location}_gp-layers${gp_layers}_reg_loss${reg_loss}
+
 cosine_top_k: 1
+reg_loss_weight: 0.1 
+encoder_dim: 1024 # 1024(encoder dimension)-> 128(projection dimension) in Contrastive learning
+projection_dim: 768 # projection dimension in Contrastive learning and hidden dim in Vanilla PLM classification.
+temperature: 0.2
 
-ce_cl2_projection: token  
-gp_location: token # cls, token
 
-
-task_name: mix_banking # ['clinc150', 'snips', 'banking77', 'mix_snips', 'mix_banking']
