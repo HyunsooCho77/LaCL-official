@@ -58,6 +58,6 @@ cosine_top_k: 1
 reg_loss_weight: 0.1 
 encoder_dim: 1024 # 1024(encoder dimension)-> 128(projection dimension) in Contrastive learning
 projection_dim: 768 # projection dimension in Contrastive learning and hidden dim in Vanilla PLM classification.
-temperature: 0.2
+temperature: 0.05
 
 
