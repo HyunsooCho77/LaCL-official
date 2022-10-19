@@ -1,5 +1,6 @@
 # LaCL-official
-Official code for layer-agnostic contrastive learning.
+Official code for LaCL (layer-agnostic contrastive learning) - EMNLP Findings 2022.
+
 Some codes are from (https://github.com/wzhouad/Contra-OOD).
 
 
