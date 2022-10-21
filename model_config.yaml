@@ -20,7 +20,7 @@ n_gpu: 1
 # Basic config
 model_name: "LaCL"
 num_train_epochs: 40
-train_batch: 100
+train_batch: 128
 seed: 1
 log_interval: 1
 
