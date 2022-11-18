@@ -1,1 +1,0 @@
-Download stsa.binary.test from https://github.com/AcademiaSinicaNLPLab/sentiment_dataset/tree/master/data and rename it to test.data.
